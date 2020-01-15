@@ -1,0 +1,7 @@
+apiVersion: v2
+name: guestbook
+dependencies:
+  - name: redis
+    version: 10.x.x
+    repository: https://charts.bitnami.com
+version: 0.0.1
