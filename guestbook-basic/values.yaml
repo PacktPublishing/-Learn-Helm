@@ -1,0 +1,31 @@
+## guestbookReplicas specifies the number of Guestbook pods to deploy
+guestbookReplicas: 3
+## redisReplicas specifies the number of Redis slaves to deploy for replication
+redisReplicas: 2
+
+## image sets the image to use of the Guestbook application
+image:
+  registry: gcr.io
+  repository: google-samples/gb-frontend
+  tag: v4
+
+## resources specifies the resource requests and limits of a Guestbook pod
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 100m
+    memory: 100Mi
+
+healthchecks:
+  ## healthchecks.enabled determines whether to include a pre-configured liveness and readiness probe
+  enabled: true
+  ## healthchecks.port determines the port to use against the healthchecks
+  port: 80
+
+## serviceType configures the Guestbook service (can be set to ClusterIP, NodePort, or LoadBalancer)
+serviceType: NodePort
+## servicePorts determines the ports that should exposed on the Guestbook service
+servicePorts:
+- 80
