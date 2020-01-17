@@ -3,11 +3,11 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-redis-master
   labels:
-{{ include "guestbook.common-labels" . | indent 4 }}
+{{ include "guestbook-basic.common-labels" . | indent 4 }}
     "app.kubernetes.io/component": backend
 spec:
+  type: ClusterIP
   ports:
   - port: 6379
-    targetPort: 6379
   selector:
     app: {{ .Release.Name }}-redis-master

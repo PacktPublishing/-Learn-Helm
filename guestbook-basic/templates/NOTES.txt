@@ -1,0 +1,7 @@
+Thank you for using the Guestbook chart!
+{{- if eq .Values.serviceType "NodePort" }}
+Access your application by running the following commands:
+export IP=$(kubectl get nodes -o jsonpath="{.items[0].status.addresses[0].address}")
+export PORT=$(kubectl get svc {{ .Release.Name }} -n {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}")
+echo http://$IP:$PORT
+{{- end }}

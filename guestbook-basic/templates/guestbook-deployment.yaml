@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-{{ include "guestbook.common-labels" . | indent 4 }}
+{{ include "guestbook-basic.common-labels" . | indent 4 }}
     "app.kubernetes.io/component": frontend
 spec:
   selector:
