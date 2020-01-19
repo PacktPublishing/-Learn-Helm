@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-redis-slave
   labels:
-{{ include "guestbook-basic.common-labels" . | indent 4 }}
+{{ include "guestbook.common-labels" . | indent 4 }}
     "app.kubernetes.io/component": backend
 spec:
   type: ClusterIP

@@ -18,10 +18,6 @@ healthchecks:
   enabled: true
   ## healthchecks.port determines the port to use against the healthchecks
   port: 80
-## enableBackup determines whether the Redis database should be backed up on a helm upgrade
-enableBackups: true
-## enableRestore determines whether the Redis database should be restored on a helm rollback
-enableRestores: true
 ## serviceType can be set to ClusterIP, NodePort, or LoadBalancer
 serviceType: NodePort
 ## servicePorts determines the ports that should exposed on the service

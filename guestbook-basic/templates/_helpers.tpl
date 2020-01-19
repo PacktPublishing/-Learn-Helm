@@ -1,4 +1,4 @@
-{{- define "guestbook-basic.common-labels" -}}
+{{- define "guestbook.common-labels" -}}
 "app.kubernetes.io/name": {{ .Chart.Name }}
 "helm.sh/chart": {{ .Chart.Name }}-{{ .Chart.Version }}
 "app.kubernetes.io/managed-by": {{ .Release.Service }}

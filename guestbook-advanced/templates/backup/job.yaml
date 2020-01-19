@@ -1,4 +1,4 @@
-{{- if and .Values.enableBackups .Values.redis.master.persistence.enabled }}
+{{- if .Values.redis.master.persistence.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:

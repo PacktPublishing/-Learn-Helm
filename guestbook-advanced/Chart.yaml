@@ -1,7 +1,9 @@
 apiVersion: v2
 name: guestbook
+version: 0.2.0
+appVersion: v4
+description: A chart for deploying the Guestbook tutorial application, including a PHP frontend and a Redis backend
 dependencies:
   - name: redis
     version: 10.x.x
     repository: https://charts.bitnami.com
-version: 0.0.1

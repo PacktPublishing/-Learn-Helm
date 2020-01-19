@@ -1,4 +1,4 @@
-{{- if and .Values.enableRestores .Values.redis.master.persistence.enabled }}
+{{- if .Values.redis.master.persistence.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -12,10 +12,10 @@ spec:
   template:
     spec:
       containers:
-        - name: backup
+        - name: restore
           image: redis:alpine3.11
           command: ["/bin/sh", "-c"]
-          args: ["cp /backup/dump.rdb /data/dump.rdb && redis-cli -h {{ .Release.Name }}-redis-master shutdown"]
+          args: ["cp /backup/dump.rdb /data/dump.rdb && redis-cli -h {{ .Release.Name }}-redis-master debug restart || true"]
           volumeMounts:
             - name: redis-data
               mountPath: /data

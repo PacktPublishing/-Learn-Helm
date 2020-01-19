@@ -18,7 +18,7 @@ spec:
       - name: php-redis
         image: {{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
         resources:
-{{ .Values.resources | toYaml | indent 10 }}
+{{ required "value 'resources' is required" .Values.resources | toYaml | indent 10 }}
         env:
         - name: GET_HOSTS_FROM
           value: env

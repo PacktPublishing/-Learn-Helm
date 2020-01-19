@@ -1,4 +1,4 @@
-{{- if and .Values.enableBackups .Values.redis.master.persistence.enabled }}
+{{- if .Values.redis.master.persistence.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
