@@ -1,5 +1,5 @@
 ## guestbookReplicas specifies the number of Guestbook pods to deploy
-guestbookReplicas: 3
+guestbookReplicas: 2
 ## redisReplicas specifies the number of Redis slaves to deploy for replication
 redisReplicas: 2
 
@@ -11,9 +11,6 @@ image:
 
 ## resources specifies the resource requests and limits of a Guestbook pod
 resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
   limits:
     cpu: 100m
     memory: 100Mi

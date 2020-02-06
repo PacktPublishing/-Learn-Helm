@@ -1,0 +1,145 @@
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+service:
+  master:
+    type: NodePort
+serviceAccount:
+  master:
+    create: true
+  agent:
+    create: true
+rbac:
+  master:
+    create: true
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - pods
+        verbs:
+          - create
+          - delete
+          - get
+          - list
+          - watch
+      - apiGroups:
+          - ""
+        resources:
+          - pods/exec
+        verbs:
+          - get
+  agent:
+    create: true
+    rules:
+      - apiGroups:
+          - ""
+        resources:
+          - pods
+          - pods/log
+          - services
+          - configmaps
+          - secrets
+          - serviceaccounts
+          - persistentvolumeclaims
+          - namespaces
+          - events
+        verbs:
+          - get
+          - list
+          - update
+          - watch
+          - create
+          - delete
+      - apiGroups:
+          - "apps"
+        resources:
+          - statefulsets
+          - deployments
+          - replicasets
+        verbs:
+          - get
+          - list
+          - update
+          - watch
+          - create
+          - delete
+persistence:
+  size: 2Gi
+javaOpts: >-
+  -Dhudson.slaves.NodeProvisioner.initialDelay=0
+  -Dhudson.model.LoadStatistics.decay=0.7
+  -Dhudson.slaves.NodeProvisioner.MARGIN=30
+  -Dhudson.slaves.NodeProvisioner.MARGIN0=0.6
+  -XX:+UnlockExperimentalVMOptions
+  -XX:+UseCGroupMemoryLimitForHeap
+  -XX:MaxRAMFraction=2
+  -XshowSettings:vm
+  -Djenkins.install.runSetupWizard=false
+referenceContent:
+  - data:
+      - fileName: plugins.txt
+        fileContent: |
+          configuration-as-code:1.35
+          configuration-as-code-support:1.18
+          git:4.1.1
+          job-dsl:1.76
+          kubernetes:1.23.2
+          workflow-aggregator:2.6
+
+      - fileName: jenkins.yaml
+        fileContent: |
+          credentials:
+            system:
+              domainCredentials:
+                - credentials:
+                    - usernamePassword:
+                        scope: GLOBAL
+                        id: github-auth
+                        username: {{ required "value 'githubUsername' is required" .Values.githubUsername }}
+                        password: {{ required "value 'githubPassword' is required" .Values.githubPassword }}
+                        description: Password to pull/push to personal GitHub LearnHelm Fork
+          jenkins:
+            numExecutors: 0
+            clouds:
+              - kubernetes:
+                  name: kubernetes
+                  serverUrl: https://kubernetes.default
+                  namespace: {{ .Release.Namespace }}
+                  jenkinsUrl: http://{{ include "jenkins.fullname" . }}-master:{{ .Values.service.master.port }}
+                  jenkinsTunnel: {{ include "jenkins.fullname" . }}-agent:{{ .Values.service.agent.port }}
+                  templates:
+                    - name: chart-testing
+                      label: chart-testing
+                      idleMinutes: 5
+                      namespace: {{ .Release.Namespace }}
+                      nodeUsageMode: NORMAL
+                      serviceAccount: {{ if .Values.serviceAccount.agent.name }}{{ .Values.serviceAccount.agent.name }}{{ else }}{{ include "jenkins.fullname" . }}-agent{{ end }}
+                      containers:
+                        - name: chart-testing
+                          image: quay.io/helmpack/chart-testing:v3.0.0-beta.1
+                          ttyEnabled: true
+                          resourceLimitCpu: 200m
+                          resourceLimitMemory: 500Mi
+          jobs:
+            - script: |-
+                multibranchPipelineJob('test') {
+                  factory {
+                    workflowBranchProjectFactory {
+                      scriptPath('charts/Jenkinsfile')
+                    }
+                  }
+                  branchSources {
+                    git {
+                      id('test')
+                      remote({{ required "value 'githubUri' is required" .Values.githubUri | quote }})
+                      credentialsId('github-auth')
+                    }
+                  }
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(10)
+                    }
+                  }
+                }

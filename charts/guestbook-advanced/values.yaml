@@ -1,5 +1,5 @@
 ## guestbookReplicas specifies the number of Guestbook pods to deploy
-guestbookReplicas: 3
+guestbookReplicas: 2
 ## image sets the image to use of the Guestbook application
 image:
   registry: gcr.io
@@ -7,11 +7,8 @@ image:
   tag: v4
 ## resources specifies the resource requests and limits of a Guestbook pod
 resources:
-  requests:
-    cpu: 100m
-    memory: 100Mi
   limits:
-    cpu: 100m
+    cpu: 50m
     memory: 100Mi
 healthchecks:
   ## healthchecks.enabled determines whether to include a pre-configured liveness and readiness probe
@@ -34,6 +31,14 @@ redis:
   master:
     persistence:
       size: 1Gi
+    resources:
+      limits:
+        cpu: 100m
+        memory: 100Mi
   slave:
     persistence:
       size: 1Gi
+    resources:
+      limits:
+        cpu: 100m
+        memory: 100Mi

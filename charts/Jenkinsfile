@@ -1,0 +1,35 @@
+pipeline {
+    agent { label "chart-testing" }
+    stages {
+        /*
+        stage("Setup") {
+            steps {
+                container("chart-testing") {
+                    sh "helm repo add bitnami https://charts.bitnami.com"
+                }
+            }
+        }
+        stage("Lint and Install") {
+            steps {
+                container("chart-testing") {
+                    sh "ct lint-and-install"
+                }
+            }
+        }
+        */
+        stage("Package Charts") {
+            steps {
+                script {
+                    container("chart-testing") {
+                        def changedCharts = sh(script: "ct list-changed", returnStdout: true)
+                        def changedChartsList = changedCharts.split("\n")
+                        changedChartsList.each { chart ->
+                            echo chart
+                            //sh "helm package ${chart}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
