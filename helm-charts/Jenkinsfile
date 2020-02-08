@@ -4,14 +4,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '10'))
     }
     stages {
-        /*
-        stage("Setup") {
-            steps {
-                container("chart-testing") {
-                    sh "helm repo add bitnami https://charts.bitnami.com"
-                }
-            }
-        }
         stage("Lint and Install") {
             steps {
                 container("chart-testing") {
@@ -19,7 +11,6 @@ pipeline {
                 }
             }
         }
-        */
         stage("Package Charts") {
             steps {
                 script {
@@ -28,7 +19,7 @@ pipeline {
                         def changedChartsList = changedCharts.split("\n")
                         changedChartsList.each { chart ->
                             echo chart
-                            //sh "helm package ${chart}"
+                            sh "helm package ${chart}"
                         }
                     }
                 }
