@@ -1,5 +1,8 @@
 pipeline {
     agent { label "chart-testing" }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
     stages {
         /*
         stage("Setup") {
