@@ -112,7 +112,7 @@ referenceContent:
                   templates:
                     - name: chart-testing
                       label: chart-testing
-                      idleMinutes: 5
+                      idleMinutes: 0
                       namespace: {{ .Release.Namespace }}
                       nodeUsageMode: NORMAL
                       serviceAccount: {{ if .Values.serviceAccount.agent.name }}{{ .Values.serviceAccount.agent.name }}{{ else }}{{ include "jenkins.fullname" . }}-agent{{ end }}

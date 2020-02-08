@@ -1,3 +1,6 @@
+def changedCharts
+def packagedChartsCount = 0
+
 pipeline {
     agent { label "chart-testing" }
     options {
@@ -7,7 +10,7 @@ pipeline {
         stage("Lint and Install") {
             steps {
                 container("chart-testing") {
-                    sh "ct lint-and-install"
+                    sh "ct lint-and-install --upgrade"
                 }
             }
         }
@@ -15,11 +18,35 @@ pipeline {
             steps {
                 script {
                     container("chart-testing") {
-                        def changedCharts = sh(script: "ct list-changed", returnStdout: true)
+                        changedCharts = sh(script: "ct list-changed", returnStdout: true)
                         def changedChartsList = changedCharts.split("\n")
+                        sh "mkdir packaged-charts"
                         changedChartsList.each { chart ->
-                            echo chart
-                            sh "helm package ${chart}"
+                            if (chart != "") {
+                                echo chart
+                                sh "helm package ${chart} --destination packaged-charts"
+                                packagedChartsCount++
+                            }
+                        }
+                        echo "Packaged ${packagedChartsCount} charts."
+                    }
+                }
+            }
+        }
+        stage("Push Charts to Chart Repo") {
+            when { not { equals expected: 0, actual: packagedChartsCount } }
+            steps {
+                container("chart-testing") {
+                    sh "git clone https://github.com/deweya/Learn-Helm-Repository.git chart-repo"
+                    sh "mv packaged-charts/*.tgz chart-repo"
+                    sh "helm repo index chart-repo --merge packaged-charts/index.yaml"
+                    sh "git config --global user.email '<>'"
+                    sh "git config --global user.name 'chartrepo-robot'"
+                    dir("chart-repo") {
+                        withCredentials([usernameColonPassword(credentialsId: 'github-auth', variable: 'USERPASS')]) {
+                            sh "git add --all"
+                            sh "git commit -m 'updated charts:\n${changedCharts}'"
+                            sh "git push https://${USERPASS}@github.com/deweya/Learn-Helm-Repository.git master"
                         }
                     }
                 }
