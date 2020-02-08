@@ -127,7 +127,7 @@ referenceContent:
                 multibranchPipelineJob('test') {
                   factory {
                     workflowBranchProjectFactory {
-                      scriptPath('charts/Jenkinsfile')
+                      scriptPath('helm-charts/Jenkinsfile')
                     }
                   }
                   branchSources {
