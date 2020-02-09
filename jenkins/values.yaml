@@ -137,7 +137,7 @@ referenceContent:
                   branchSources {
                     git {
                       id('test')
-                      remote({{ required "value 'githubUri' is required" .Values.githubUri | quote }})
+                      remote({{ required "value 'githubForkUri' is required" .Values.githubForkUri | quote }})
                       credentialsId('github-auth')
                     }
                   }
