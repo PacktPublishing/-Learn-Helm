@@ -122,6 +122,10 @@ referenceContent:
                           ttyEnabled: true
                           resourceLimitCpu: 200m
                           resourceLimitMemory: 500Mi
+                      envVars:
+                        - envVar:
+                            key: GITHUB_PAGES_REPO_URI
+                            value: {{ required "value 'githubPagesRepoUri' is required" .Values.githubPagesRepoUri }}
           jobs:
             - script: |-
                 multibranchPipelineJob('test') {

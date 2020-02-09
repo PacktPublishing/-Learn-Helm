@@ -37,16 +37,19 @@ pipeline {
             when { not { equals expected: 0, actual: packagedChartsCount } }
             steps {
                 container("chart-testing") {
-                    sh "git clone https://github.com/deweya/Learn-Helm-Repository.git chart-repo"
+                    sh "git clone ${env.GITHUB_PAGES_REPO_URI} chart-repo"
                     sh "mv packaged-charts/*.tgz chart-repo"
                     sh "helm repo index chart-repo --merge packaged-charts/index.yaml"
-                    sh "git config --global user.email '<>'"
+                    sh "git config --global user.email 'chartrepo-robot@example.com'"
                     sh "git config --global user.name 'chartrepo-robot'"
                     dir("chart-repo") {
+                        sh "git add --all"
+                        sh "git commit -m 'updated charts:\n${changedCharts}'"
                         withCredentials([usernameColonPassword(credentialsId: 'github-auth', variable: 'USERPASS')]) {
-                            sh "git add --all"
-                            sh "git commit -m 'updated charts:\n${changedCharts}'"
-                            sh "git push https://${USERPASS}@github.com/deweya/Learn-Helm-Repository.git master"
+                            script {
+                                def authRepo = env.GITHUB_PAGES_REPO_URI.replace("://", "://${USERPASS}@")
+                                sh "git push ${authRepo} master"
+                            }
                         }
                     }
                 }
