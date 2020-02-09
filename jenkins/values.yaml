@@ -110,8 +110,8 @@ referenceContent:
                   jenkinsUrl: http://{{ include "jenkins.fullname" . }}-master:{{ .Values.service.master.port }}
                   jenkinsTunnel: {{ include "jenkins.fullname" . }}-agent:{{ .Values.service.agent.port }}
                   templates:
-                    - name: chart-testing
-                      label: chart-testing
+                    - name: chart-testing-agent
+                      label: chart-testing-agent
                       idleMinutes: 0
                       namespace: {{ .Release.Namespace }}
                       nodeUsageMode: NORMAL
