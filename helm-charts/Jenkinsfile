@@ -41,7 +41,11 @@ pipeline {
             }
         }
         stage("Push Charts to Chart Repo") {
-            when { not { equals expected: 0, actual: packagedChartsCount } }
+            when {
+                expression {
+                    return (packagedChartsCount > 0) && (env.BRANCH_NAME == 'master')
+                }
+            }
             steps {
                 container("chart-testing") {
                     sh "git clone ${env.GITHUB_PAGES_REPO_URI} chart-repo"
