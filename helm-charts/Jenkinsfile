@@ -22,6 +22,11 @@ pipeline {
             }
         }
         stage("Package Charts") {
+            when {
+                expression {
+                    return env.BRANCH_NAME == "master"
+                }
+            }
             steps {
                 script {
                     container("chart-testing") {
@@ -40,10 +45,11 @@ pipeline {
                 }
             }
         }
+        /*
         stage("Push Charts to Chart Repo") {
             when {
                 expression {
-                    return (packagedChartsCount > 0) && (env.BRANCH_NAME == 'master')
+                    return env.BRANCH_NAME == "master"
                 }
             }
             steps {
@@ -66,5 +72,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
