@@ -1,6 +1,3 @@
-def changedCharts
-def packagedChartsCount = 0
-
 pipeline {
     agent { label "chart-testing-agent" }
     options {
@@ -22,56 +19,56 @@ pipeline {
             }
         }
         stage("Package Charts") {
-            when {
-                expression {
-                    return env.BRANCH_NAME == "master"
-                }
-            }
             steps {
                 script {
                     container("chart-testing") {
-                        changedCharts = sh(script: "ct list-changed", returnStdout: true)
-                        def changedChartsList = changedCharts.split("\n")
                         sh "mkdir packaged-charts"
-                        changedChartsList.each { chart ->
-                            if (chart != "") {
-                                echo chart
-                                sh "helm package ${chart} --destination packaged-charts"
-                                packagedChartsCount++
-                            }
+                        charts = sh(script: "find helm-charts/charts ! -path helm-charts/charts -type d -maxdepth 1 -print", returnStdout: true)
+                        chartList = charts.split("\n")
+                        chartList.each { chart ->
+                            sh "helm package ${chart} --dependency-update --destination packaged-charts"
                         }
-                        echo "Packaged ${packagedChartsCount} charts."
                     }
                 }
             }
         }
-        /*
         stage("Push Charts to Chart Repo") {
-            when {
-                expression {
-                    return env.BRANCH_NAME == "master"
-                }
-            }
             steps {
-                container("chart-testing") {
-                    sh "git clone ${env.GITHUB_PAGES_REPO_URI} chart-repo"
-                    sh "mv packaged-charts/*.tgz chart-repo"
-                    sh "helm repo index chart-repo --merge packaged-charts/index.yaml"
-                    sh "git config --global user.email 'chartrepo-robot@example.com'"
-                    sh "git config --global user.name 'chartrepo-robot'"
-                    dir("chart-repo") {
-                        sh "git add --all"
-                        sh "git commit -m 'updated charts:\n${changedCharts}'"
-                        withCredentials([usernameColonPassword(credentialsId: 'github-auth', variable: 'USERPASS')]) {
-                            script {
-                                def authRepo = env.GITHUB_PAGES_REPO_URI.replace("://", "://${USERPASS}@")
-                                sh "git push ${authRepo} master"
+                script {
+                    container("chart-testing") {
+                        sh "git clone ${env.GITHUB_PAGES_REPO_URI} chart-repo"
+                        def repoType
+                        if (env.BRANCH_NAME == "master") {
+                            repoType = "stable"
+                        } else {
+                            repoType = "staging"
+                        }
+                        def files = sh(script: "ls chart-repo", returnStdout: true)
+                        if (!files.contains(repoType)) {
+                            sh "mkdir chart-repo/${repoType}"
+                        }
+                        sh "mv packaged-charts/*.tgz chart-repo/${repoType}"
+                        sh "helm repo index chart-repo/${repoType} --merge packaged-charts/index.yaml"
+                        sh "git config --global user.email 'chartrepo-robot@example.com'"
+                        sh "git config --global user.name 'chartrepo-robot'"
+                        dir("chart-repo") {
+                            def status = sh(script: "git status -s", returnStdout: true)
+                            if (status.contains("tgz") || status.contains("staging/\n") || status.contains("stable/\n")) {
+                                sh "git add --all"
+                                sh "git commit -m 'pushing charts from branch ${env.BRANCH_NAME}'"
+                                withCredentials([usernameColonPassword(credentialsId: 'github-auth', variable: 'USERPASS')]) {
+                                    script {
+                                        def authRepo = env.GITHUB_PAGES_REPO_URI.replace("://", "://${USERPASS}@")
+                                        sh "git push ${authRepo} master"
+                                    }
+                                }
+                            } else {
+                                echo "No charts changed! Skipping push..."
                             }
                         }
                     }
                 }
             }
         }
-        */
     }
 }
