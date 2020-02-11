@@ -128,7 +128,7 @@ referenceContent:
                             value: {{ required "value 'githubPagesRepoUri' is required" .Values.githubPagesRepoUri }}
           jobs:
             - script: |-
-                multibranchPipelineJob('test') {
+                multibranchPipelineJob('Test and Deploy Helm Charts') {
                   factory {
                     workflowBranchProjectFactory {
                       scriptPath('helm-charts/Jenkinsfile')
