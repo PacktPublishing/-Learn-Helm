@@ -1,5 +1,5 @@
 apiVersion: v2
-name: guestbook
+name: guestbook-basic
 version: 0.2.0
 appVersion: v4
 description: A chart for deploying the Guestbook tutorial application, including a PHP frontend and a Redis backend
