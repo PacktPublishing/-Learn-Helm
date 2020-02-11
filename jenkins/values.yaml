@@ -99,7 +99,7 @@ referenceContent:
                         id: github-auth
                         username: {{ required "value 'githubUsername' is required" .Values.githubUsername }}
                         password: {{ required "value 'githubPassword' is required" .Values.githubPassword }}
-                        description: Password to pull/push to personal GitHub LearnHelm Fork
+                        description: Password to authenticate with GitHub
           jenkins:
             numExecutors: 0
             clouds:
