@@ -126,6 +126,9 @@ referenceContent:
                         - envVar:
                             key: GITHUB_PAGES_REPO_URI
                             value: {{ required "value 'githubPagesRepoUri' is required" .Values.githubPagesRepoUri }}
+                        - envVar:
+                            key: GITHUB_PAGES_SITE_URI
+                            value: {{ .Values.githubPagesSiteUri }}
           jobs:
             - script: |-
                 multibranchPipelineJob('Test and Deploy Helm Charts') {

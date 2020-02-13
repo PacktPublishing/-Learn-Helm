@@ -1,0 +1,56 @@
+pipeline {
+    agent { label "chart-testing-agent" }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+    }
+    stages {
+        stage("Setup") {
+            steps {
+                container("chart-testing") {
+                    sh "helm repo add learnhelm ${env.GITHUB_PAGES_SITE_URI}"
+                }
+            }
+        }
+        stage("Deploy to Dev") {
+            steps {
+                container("chart-testing") {
+                    dir("nginx-cd") {
+                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values dev/values.yaml -n dev --wait"
+                    }
+                }
+            }
+        }
+        stage("Smoke Test") {
+            steps {
+                container("chart-testing") {
+                    sh "helm test nginx -n dev"
+                }
+            }
+        }
+        stage("Deploy to QA") {
+            steps {
+                container("chart-testing") {
+                    dir("nginx-cd") {
+                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values qa/values.yaml -n qa --wait"
+                    }
+                }
+            }
+        }
+        stage("Wait for Input") {
+            steps {
+                container("chart-testing") {
+                    input "Deploy to Prod?"
+                }
+            }
+        }
+        stage("Deploy to Prod") {
+            steps {
+                container("chart-testing") {
+                    dir("nginx-cd") {
+                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values prod/values.yaml -n prod --wait"
+                    }
+                }
+            }
+        }
+    }
+}
