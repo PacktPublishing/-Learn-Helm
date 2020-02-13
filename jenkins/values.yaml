@@ -150,3 +150,29 @@ referenceContent:
                     }
                   }
                 }
+                {{- /*
+                The below job will be configured if the githubPagesSiteUri value has been configured.
+                This will imply that the reader is on the CD portion of Chapter 7, and that this
+                  job is now relevant and should be displayed.
+                */ -}}
+                {{- if .Values.githubPagesSiteUri }}
+                multibranchPipelineJob('Deploy NGINX Chart') {
+                  factory {
+                    workflowBranchProjectFactory {
+                      scriptPath('nginx-cd/Jenkinsfile')
+                    }
+                  }
+                  branchSources {
+                    git {
+                      id('test')
+                      remote({{ required "value 'githubForkUri' is required" .Values.githubForkUri | quote }})
+                      credentialsId('github-auth')
+                    }
+                  }
+                  orphanedItemStrategy {
+                    discardOldItems {
+                      numToKeep(10)
+                    }
+                  }
+                }
+                {{- end }}
