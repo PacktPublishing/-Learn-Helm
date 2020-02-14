@@ -28,6 +28,11 @@ pipeline {
             }
         }
         stage("Deploy to QA") {
+            when {
+                expression {
+                    return env.BRANCH_NAME == "master"
+                }
+            }
             steps {
                 container("chart-testing") {
                     dir("nginx-cd") {
@@ -37,6 +42,11 @@ pipeline {
             }
         }
         stage("Wait for Input") {
+            when {
+                expression {
+                    return env.BRANCH_NAME == "master"
+                }
+            }
             steps {
                 container("chart-testing") {
                     input "Deploy to Prod?"
@@ -44,6 +54,11 @@ pipeline {
             }
         }
         stage("Deploy to Prod") {
+            when {
+                expression {
+                    return env.BRANCH_NAME == "master"
+                }
+            }
             steps {
                 container("chart-testing") {
                     dir("nginx-cd") {
