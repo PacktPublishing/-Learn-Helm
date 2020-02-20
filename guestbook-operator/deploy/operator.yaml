@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: guestbook-operator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: guestbook-operator
+  template:
+    metadata:
+      labels:
+        name: guestbook-operator
+    spec:
+      serviceAccountName: guestbook-operator
+      containers:
+        - name: guestbook-operator
+          # Replace this with the built image name
+          image: quay.io/adewey/guestbook-operator
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "guestbook-operator"

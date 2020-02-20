@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: guestbook-operator
+subjects:
+- kind: ServiceAccount
+  name: guestbook-operator
+roleRef:
+  kind: Role
+  name: guestbook-operator
+  apiGroup: rbac.authorization.k8s.io
