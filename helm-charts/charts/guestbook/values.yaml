@@ -5,7 +5,7 @@ image:
   registry: gcr.io
   repository: google-samples/gb-frontend
   tag: v4
-## resources specifies the resource requests and limits of a Guestbook pod
+## resources specifies the resource limits of a Guestbook pod
 resources:
   limits:
     cpu: 50m

@@ -19,9 +19,6 @@ spec:
       - name: master
         image: k8s.gcr.io/redis:e2e
         resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
           limits:
             cpu: 100m
             memory: 100Mi
