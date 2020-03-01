@@ -1,5 +1,5 @@
 ## guestbookReplicas specifies the number of Guestbook pods to deploy
-guestbookReplicas: 2
+guestbookReplicas: 1
 ## image sets the image to use of the Guestbook application
 image:
   registry: gcr.io
