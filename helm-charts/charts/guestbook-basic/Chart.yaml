@@ -2,7 +2,7 @@ apiVersion: v2
 name: guestbook-basic
 version: 0.1.0
 appVersion: v4
-description: A chart for deploying the Guestbook tutorial application, including a PHP frontend and a Redis backend. The basic chart written in Chapter 5.
+description: A chart for deploying the Guestbook tutorial application, including a PHP frontend and a Redis backend.
 home: https://kubernetes.io/docs/tutorials/stateless-application/guestbook/
 maintainers:
   - name: PacktPublishing
