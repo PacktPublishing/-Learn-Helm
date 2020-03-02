@@ -12,7 +12,7 @@ image:
 ## resources specifies the resource limits of a Guestbook pod
 resources:
   limits:
-    cpu: 100m
+    cpu: 50m
     memory: 100Mi
 
 healthchecks:
