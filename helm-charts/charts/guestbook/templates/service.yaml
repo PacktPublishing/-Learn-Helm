@@ -5,7 +5,12 @@ metadata:
   labels:
     {{- include "guestbook.labels" . | nindent 4 }}
 spec:
+{{- $serviceTypes := list "ClusterIP" "NodePort" }}
+{{- if has .Values.service.type $serviceTypes }}
   type: {{ .Values.service.type }}
+{{- else }}
+  {{- fail "value 'service.type' must be either 'ClusterIP' or 'NodePort'" }}
+{{- end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
