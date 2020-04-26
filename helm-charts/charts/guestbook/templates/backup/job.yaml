@@ -4,7 +4,7 @@ kind: Job
 metadata:
   name: {{ .Release.Name }}-backup
   labels:
-{{ include "guestbook.common-labels" . | indent 4 }}
+    {{- include "guestbook.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -16,7 +16,7 @@ spec:
         - name: backup
           image: redis:alpine3.11
           command: ["/bin/sh", "-c"]
-          args: ["redis-cli -h {{ .Release.Name }}-redis-master save && cp /data/dump.rdb /backup/dump.rdb"]
+          args: ["redis-cli -h {{ .Values.redis.fullnameOverride }}-master save && cp /data/dump.rdb /backup/dump.rdb"]
           volumeMounts:
             - name: redis-data
               mountPath: /data
@@ -26,9 +26,8 @@ spec:
       volumes:
         - name: redis-data
           persistentVolumeClaim:
-            claimName: redis-data-{{ .Release.Name }}-redis-master-0
+            claimName: redis-data-{{ .Values.redis.fullnameOverride }}-master-0
         - name: backup
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-backup-{{ sub .Release.Revision 1 }}
+            claimName: redis-data-{{ .Values.redis.fullnameOverride }}-master-0-backup-{{ sub .Release.Revision 1 }}
 {{- end }}
-            
