@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "guestbook.fullname" . }}-test-frontend-connection
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  containers:
+    - name: test-frontend-connection
+      image: curlimages/curl:7.68.0
+      command: ["/bin/sh", "-c"]
+      args: ["curl {{ include "guestbook.fullname" . }}"]
+  restartPolicy: Never

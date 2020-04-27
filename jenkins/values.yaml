@@ -1,7 +1,7 @@
 resources:
   limits:
     cpu: 500m
-    memory: 1Gi
+    memory: 2Gi
 service:
   master:
     type: NodePort
@@ -124,14 +124,14 @@ referenceContent:
                           resourceLimitMemory: 500Mi
                       envVars:
                         - envVar:
-                            key: GITHUB_PAGES_REPO_URI
-                            value: {{ required "value 'githubPagesRepoUri' is required" .Values.githubPagesRepoUri }}
+                            key: GITHUB_PAGES_REPO_URL
+                            value: {{ required "value 'githubPagesRepoUrl' is required" .Values.githubPagesRepoUrl }}
                         - envVar:
-                            key: GITHUB_PAGES_SITE_URI
-                            value: {{ .Values.githubPagesSiteUri }}
+                            key: GITHUB_PAGES_SITE_URL
+                            value: {{ .Values.githubPagesSiteUrl }}
           jobs:
             - script: |-
-                multibranchPipelineJob('Test and Deploy Helm Charts') {
+                multibranchPipelineJob('Test and Release Helm Charts') {
                   factory {
                     workflowBranchProjectFactory {
                       scriptPath('helm-charts/Jenkinsfile')
@@ -140,7 +140,7 @@ referenceContent:
                   branchSources {
                     git {
                       id('test')
-                      remote({{ required "value 'githubForkUri' is required" .Values.githubForkUri | quote }})
+                      remote({{ required "value 'githubForkUrl' is required" .Values.githubForkUrl | quote }})
                       credentialsId('github-auth')
                     }
                   }
@@ -151,11 +151,11 @@ referenceContent:
                   }
                 }
                 {{- /*
-                The below job will be configured if the githubPagesSiteUri value has been configured.
+                The below job will be configured if the githubPagesSiteUrl value has been configured.
                 This will imply that the reader is on the CD portion of Chapter 7, and that this
                   job is now relevant and should be displayed.
                 */ -}}
-                {{- if .Values.githubPagesSiteUri }}
+                {{- if .Values.githubPagesSiteUrl }}
                 multibranchPipelineJob('Deploy NGINX Chart') {
                   factory {
                     workflowBranchProjectFactory {
@@ -165,7 +165,7 @@ referenceContent:
                   branchSources {
                     git {
                       id('test')
-                      remote({{ required "value 'githubForkUri' is required" .Values.githubForkUri | quote }})
+                      remote({{ required "value 'githubForkUrl' is required" .Values.githubForkUrl | quote }})
                       credentialsId('github-auth')
                     }
                   }

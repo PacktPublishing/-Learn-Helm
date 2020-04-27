@@ -7,7 +7,7 @@ pipeline {
         stage("Setup") {
             steps {
                 container("chart-testing") {
-                    sh "helm repo add learnhelm ${env.GITHUB_PAGES_SITE_URI}"
+                    sh "helm repo add learnhelm ${env.GITHUB_PAGES_SITE_URL}"
                 }
             }
         }
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 container("chart-testing") {
                     dir("nginx-cd") {
-                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values dev/values.yaml -n dev --wait"
+                        sh "helm upgrade --install nginx-${env.BRANCH_NAME} learnhelm/nginx --values common-values.yaml --values dev/values.yaml -n dev --wait"
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
         stage("Smoke Test") {
             steps {
                 container("chart-testing") {
-                    sh "helm test nginx -n dev"
+                    sh "helm test nginx-${env.BRANCH_NAME} -n dev"
                 }
             }
         }
@@ -36,7 +36,7 @@ pipeline {
             steps {
                 container("chart-testing") {
                     dir("nginx-cd") {
-                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values qa/values.yaml -n qa --wait"
+                        sh "helm upgrade --install nginx-${env.BRANCH_NAME} learnhelm/nginx --values common-values.yaml --values qa/values.yaml -n qa --wait"
                     }
                 }
             }
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 container("chart-testing") {
                     dir("nginx-cd") {
-                        sh "helm upgrade --install nginx learnhelm/nginx --values common-values.yaml --values prod/values.yaml -n prod --wait"
+                        sh "helm upgrade --install nginx-${env.BRANCH_NAME} learnhelm/nginx --values common-values.yaml --values prod/values.yaml -n prod --wait"
                     }
                 }
             }
