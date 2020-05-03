@@ -16,7 +16,7 @@ spec:
       containers:
         - name: guestbook-operator
           # Replace this with the built image name
-          image: quay.io/adewey/guestbook-operator
+          image: REPLACE_IMAGE
           imagePullPolicy: Always
           env:
             - name: WATCH_NAMESPACE

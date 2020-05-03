@@ -2,9 +2,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ .Release.Name }}-restore
+  name: {{ include "guestbook.fullname" . }}-restore
   labels:
-{{ include "guestbook.common-labels" . | indent 4 }}
+    {{- include "guestbook.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": pre-rollback
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
@@ -15,7 +15,8 @@ spec:
         - name: restore
           image: redis:alpine3.11
           command: ["/bin/sh", "-c"]
-          args: ["cp /backup/dump.rdb /data/dump.rdb && redis-cli -h {{ .Release.Name }}-redis-master debug restart || true"]
+          args: ["cp /backup/dump.rdb /data/dump.rdb &&
+            redis-cli -h {{ .Values.redis.fullnameOverride }}-master debug restart || true"]
           volumeMounts:
             - name: redis-data
               mountPath: /data
@@ -25,8 +26,8 @@ spec:
       volumes:
         - name: redis-data
           persistentVolumeClaim:
-            claimName: redis-data-{{ .Release.Name }}-redis-master-0
+            claimName: redis-data-{{ .Values.redis.fullnameOverride }}-master-0
         - name: backup
           persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-backup-{{ .Release.Revision }}
+            claimName: redis-data-{{ .Values.redis.fullnameOverride }}-master-0-backup-{{ .Release.Revision }}
 {{- end }}

@@ -3,40 +3,36 @@ kind: Guestbook
 metadata:
   name: example-guestbook
 spec:
-  # Default values copied from <project_dir>/helm-charts/guestbook-advanced/values.yaml
+  # Default values copied from <project_dir>/helm-charts/guestbook/values.yaml
   
-  guestbookReplicas: 2
-  healthchecks:
-    enabled: true
-    port: 80
+  affinity: {}
+  fullnameOverride: ""
   image:
-    registry: gcr.io
-    repository: google-samples/gb-frontend
-    tag: v4
+    pullPolicy: IfNotPresent
+    repository: gcr.io/google-samples/gb-frontend
+  imagePullSecrets: []
+  ingress:
+    annotations: {}
+    enabled: false
+    hosts:
+    - host: chart-example.local
+      paths: []
+    tls: []
+  nameOverride: ""
+  nodeSelector: {}
+  podSecurityContext: {}
   redis:
-    configmap: |-
-      appendonly no
-      save ""
-    master:
-      persistence:
-        size: 1Gi
-      resources:
-        limits:
-          cpu: 100m
-          memory: 100Mi
-    slave:
-      persistence:
-        size: 1Gi
-      resources:
-        limits:
-          cpu: 100m
-          memory: 100Mi
+    configmap: appendonly no
+    fullnameOverride: redis
     usePassword: false
-  resources:
-    limits:
-      cpu: 50m
-      memory: 100Mi
-  servicePorts:
-  - 80
-  serviceType: NodePort
+  replicaCount: 1
+  resources: {}
+  securityContext: {}
+  service:
+    port: 80
+    type: NodePort
+  serviceAccount:
+    create: true
+    name: null
+  tolerations: []
   

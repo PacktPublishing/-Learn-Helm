@@ -1,0 +1,10 @@
+apiVersion: v2
+appVersion: v4
+dependencies:
+- name: redis
+  repository: https://charts.bitnami.com
+  version: 10.5.x
+description: A Helm chart for Kubernetes
+name: guestbook
+type: application
+version: 1.0.0

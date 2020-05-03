@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: {{ .Release.Name }}-test-backend-connection
+  name: {{ include "guestbook.fullname" . }}-test-backend-connection
   labels:
-{{ include "guestbook.common-labels" . | indent 4 }}
+    {{- include "guestbook.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook": test
     "helm.sh/hook-delete-policy": before-hook-creation
@@ -12,5 +12,6 @@ spec:
     - name: test-backend-connection
       image: redis:alpine3.11
       command: ["/bin/sh", "-c"]
-      args: ["redis-cli -h {{ .Release.Name }}-redis-master MGET messages"]
+      args: ["redis-cli -h {{ .Values.redis.fullnameOverride }}-master MGET messages"]
   restartPolicy: Never
+

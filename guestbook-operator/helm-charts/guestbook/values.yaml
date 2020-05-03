@@ -1,0 +1,30 @@
+affinity: {}
+fullnameOverride: ""
+image:
+  pullPolicy: IfNotPresent
+  repository: gcr.io/google-samples/gb-frontend
+imagePullSecrets: []
+ingress:
+  annotations: {}
+  enabled: false
+  hosts:
+  - host: chart-example.local
+    paths: []
+  tls: []
+nameOverride: ""
+nodeSelector: {}
+podSecurityContext: {}
+redis:
+  configmap: appendonly no
+  fullnameOverride: redis
+  usePassword: false
+replicaCount: 1
+resources: {}
+securityContext: {}
+service:
+  port: 80
+  type: NodePort
+serviceAccount:
+  create: true
+  name: null
+tolerations: []

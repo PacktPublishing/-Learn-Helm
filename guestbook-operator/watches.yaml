@@ -2,4 +2,4 @@
 - version: v1alpha1
   group: charts.helm.k8s.io
   kind: Guestbook
-  chart: helm-charts/guestbook-advanced
+  chart: helm-charts/guestbook
