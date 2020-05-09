@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "guestbook-operator.fullname" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: {{ include "guestbook-operator.fullname" . }}
+  template:
+    metadata:
+      labels:
+        name: {{ include "guestbook-operator.fullname" . }}
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      containers:
+        - name: guestbook-operator
+          # Replace this with the built image name
+          image: REPLACE_IMAGE
+          imagePullPolicy: Always
+          env:
+            - name: WATCH_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "guestbook-operator"
