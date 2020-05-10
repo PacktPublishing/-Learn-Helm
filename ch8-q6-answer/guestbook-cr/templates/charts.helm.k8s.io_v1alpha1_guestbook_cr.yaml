@@ -1,0 +1,21 @@
+apiVersion: charts.helm.k8s.io/v1alpha1
+kind: Guestbook
+metadata:
+  name: {{ include "guestbook-cr.fullname" . }}
+spec:
+  fullnameOverride: {{ .Values.fullnameOverride }}
+  image:
+    pullPolicy: {{ .Values.image.pullPolicy }}
+    repository: {{ .Values.image.repository }}
+  replicaCount: {{ .Values.replicaCount }}
+  resources: {{ .Values.resources | toYaml }}
+  service:
+    port: {{ .Values.service.port }}
+    type: {{ .Values.service.type }}
+  serviceAccount:
+    create: {{ .Values.serviceAccount.create }}
+    name: {{ .Values.serviceAccount.name }}
+  redis:
+    configmap: appendonly no
+    fullnameOverride: redis
+    usePassword: false
