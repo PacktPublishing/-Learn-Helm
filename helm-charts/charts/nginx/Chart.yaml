@@ -20,7 +20,5 @@ version: 1.0.0
 # incremented each time you make changes to the application.
 appVersion: 1.16.0
 
-home: https://www.nginx.com/
-
 maintainers:
   - name: PacktPublishing

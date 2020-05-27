@@ -24,5 +24,3 @@ dependencies:
   - name: redis
     version: 10.5.x
     repository: https://charts.bitnami.com
-
-home: https://github.com/PacktPublishing/-Learn-Helm/tree/master/helm-charts/charts/guestbook
