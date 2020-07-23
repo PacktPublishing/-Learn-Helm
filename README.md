@@ -34,7 +34,7 @@ if (test expression)
 **Following is what you need for this book:**
 This book is for Kubernetes developers or administrators who are interested in learning Helm to provide automation for application development on Kubernetes. Although no prior knowledge of Helm is required, basic knowledge of Kubernetes application development will be useful.
 
-With the following software and hardware list you can run all code files present in the book (Chapter 1-15).
+With the following software and hardware list you can run all code files present in the book (Chapter 1-9).
 
 ### Software and Hardware List
 
