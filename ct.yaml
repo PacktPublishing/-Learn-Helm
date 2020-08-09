@@ -2,6 +2,6 @@ chart-dirs:
   - helm-charts/charts
 
 chart-repos:
-  - bitnami=bitnami=https://charts.bitnami.com/bitnami
+  - bitnami=https://charts.bitnami.com/bitnami
 
 validate-maintainers: false
