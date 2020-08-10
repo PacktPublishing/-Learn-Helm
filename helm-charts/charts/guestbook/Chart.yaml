@@ -23,4 +23,4 @@ appVersion: v4
 dependencies:
   - name: redis
     version: 10.5.x
-    repository: https://charts.bitnami.com
+    repository: https://charts.bitnami.com/bitnami
