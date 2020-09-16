@@ -55,6 +55,12 @@ Click on the following link to see the Code in Action:
 
 [YouTube](https://www.youtube.com/playlist?list=PLeLcvrwLe1850eF3_HJGpOuIDs-1Rnays)
 
+## Errata
+* On Pages 44, 59, 60, 127, 146, 147, 148 and 207: 
+
+  The URL "https://charts.bitnami.com" _has been replaced/updated_ with "https://charts.bitnami.com/bitnami"
+
+
 ### Related products 
 * Kubernetes - A Complete DevOps Cookbook [[Packt]](https://www.packtpub.com/cloud-networking/kubernetes-a-complete-devops-cookbook?utm_source=github&utm_medium=repository&utm_campaign=9781838828042) [[Amazon]](https://www.amazon.com/dp/1838828044)
 
