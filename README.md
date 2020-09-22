@@ -56,7 +56,7 @@ Click on the following link to see the Code in Action:
 [YouTube](https://www.youtube.com/playlist?list=PLeLcvrwLe1850eF3_HJGpOuIDs-1Rnays)
 
 ## Errata
-* On Pages 44, 59, 60, 127, 146, 147, 148 and 207 :
+* In Pages 44, 59, 60, 127, 146, 147, 148 and 207 :
 
    **https://charts.bitnami.com** _needs to be changed/replaced with_ **https://charts.bitnami.com/bitnami**
 
