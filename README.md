@@ -61,6 +61,7 @@ Click on the following link to see the Code in Action:
    **https://charts.bitnami.com** _needs to be changed/replaced with_ **https://charts.bitnami.com/bitnami**
 
 * In **Table of Contents**: 
+
   **Section 3: Adanced Deployment Patterns** _needs to be changed/replaced with_ **Section 3: Advanced Deployment Patterns**
 
 ### Related products 
