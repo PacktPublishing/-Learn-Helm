@@ -60,6 +60,9 @@ Click on the following link to see the Code in Action:
 
    **https://charts.bitnami.com** _needs to be changed/replaced with_ **https://charts.bitnami.com/bitnami**
 
+* In **Table of Contents**: 
+  **Section 3: Adanced Deployment Patterns** _needs to be changed/replaced with_ **Section 3: Advanced Deployment Patterns**
+
 ### Related products 
 * Kubernetes - A Complete DevOps Cookbook [[Packt]](https://www.packtpub.com/cloud-networking/kubernetes-a-complete-devops-cookbook?utm_source=github&utm_medium=repository&utm_campaign=9781838828042) [[Amazon]](https://www.amazon.com/dp/1838828044)
 
