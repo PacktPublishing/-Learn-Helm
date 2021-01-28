@@ -1,3 +1,5 @@
+image:
+  tag: 2.222.4
 resources:
   limits:
     cpu: 500m
@@ -81,11 +83,10 @@ referenceContent:
   - data:
       - fileName: plugins.txt
         fileContent: |
-          configuration-as-code:1.35
-          configuration-as-code-support:1.18
-          git:4.1.1
-          job-dsl:1.76
-          kubernetes:1.23.2
+          configuration-as-code:1.46
+          git:4.5.2
+          job-dsl:1.77
+          kubernetes:1.26.0
           workflow-aggregator:2.6
 
       - fileName: jenkins.yaml
