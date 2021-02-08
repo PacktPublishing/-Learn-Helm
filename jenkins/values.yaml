@@ -130,6 +130,9 @@ referenceContent:
                         - envVar:
                             key: GITHUB_PAGES_SITE_URL
                             value: {{ .Values.githubPagesSiteUrl }}
+                        - envVar:
+                            key: GITHUB_PAGES_BASE_BRANCH
+                            value: {{ .Values.githubPagesBaseBranch }}
           jobs:
             - script: |-
                 multibranchPipelineJob('Test and Release Helm Charts') {

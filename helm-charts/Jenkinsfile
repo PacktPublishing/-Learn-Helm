@@ -31,12 +31,18 @@ pipeline {
             steps {
                 script {
                     container("chart-testing") {
+			// Handle master -> main branch renaming
+			def baseBranch = "main"
+			if (env.GITHUB_PAGES_BASE_BRANCH) {
+			    baseBranch = env.GITHUB_PAGES_BASE_BRANCH
+			}
+
                         // Clone GitHub Pages repository to a folder called "chart-repo"
                         sh "git clone ${env.GITHUB_PAGES_REPO_URL} chart-repo"
 
                         // Determine if these charts should be pushed to "stable" or "staging" based on the branch
                         def repoType
-                        if (env.BRANCH_NAME == "master") {
+                        if (env.BRANCH_NAME == baseBranch) {
                             repoType = "stable"
                         } else {
                             repoType = "staging"
@@ -65,9 +71,9 @@ pipeline {
 			    withCredentials([usernameColonPassword(credentialsId: 'github-auth', variable: 'USERPASS')]) {
 			        script {
 
-				    // Inject GitHub auth and push to the master branch, where the charts are being served
+				    // Inject GitHub auth and push to the repo where charts are being served
 				    def authRepo = env.GITHUB_PAGES_REPO_URL.replace("://", "://${USERPASS}@")
-				    sh "git push ${authRepo} master"
+				    sh "git push ${authRepo} ${baseBranch}"
 			        }
 			    }
                         }
